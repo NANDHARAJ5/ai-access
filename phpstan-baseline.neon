@@ -1,6 +1,12 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Expression "\(function \(float \.\.\.\$num\) \{…" on a separate line does not do anything\.$#'
+			identifier: expr.resultUnused
+			count: 1
+			path: src/Embedding/Vector.php
+
+		-
 			message: '#^Offset ''name'' might not exist on array\{value\?\: string, path\?\: string, content\: string, name\?\: string, mime\?\: string\|null\}\.$#'
 			identifier: offsetAccess.notFound
 			count: 1
