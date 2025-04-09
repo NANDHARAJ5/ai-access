@@ -16,7 +16,7 @@ use AIAccess\Http;
 /**
  * Client implementation for accessing Google Gemini API models.
  */
-final class Client
+final class Client implements AIAccess\Chat\Service
 {
 	private string $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/';
 
@@ -25,6 +25,12 @@ final class Client
 		private string $apiKey,
 		private Http\Client $httpClient = new Http\CurlClient,
 	) {
+	}
+
+
+	public function createChat(string $model): Chat
+	{
+		return new Chat($this, $model);
 	}
 
 

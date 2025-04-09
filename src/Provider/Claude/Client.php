@@ -16,7 +16,7 @@ use AIAccess\Http;
 /**
  * Client implementation for accessing Anthropic Claude API models.
  */
-final class Client
+final class Client implements AIAccess\Chat\Service
 {
 	private string $baseUrl = 'https://api.anthropic.com/';
 	private string $apiVersion = '2023-06-01';
@@ -26,6 +26,12 @@ final class Client
 		private string $apiKey,
 		private Http\Client $httpClient = new Http\CurlClient,
 	) {
+	}
+
+
+	public function createChat(string $model): Chat
+	{
+		return new Chat($this, $model);
 	}
 
 
