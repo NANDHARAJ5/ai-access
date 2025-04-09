@@ -11,6 +11,7 @@ namespace AIAccess\Provider\Claude;
 
 use AIAccess;
 use AIAccess\Chat\Role;
+use AIAccess\ServiceException;
 
 
 /**
@@ -56,6 +57,18 @@ final class Chat extends AIAccess\Chat\Chat
 			fn($value) => $value !== null,
 		));
 		return $this;
+	}
+
+
+	/**
+	 * Counts tokens for the current chat history, system instruction.
+	 * @throws ServiceException
+	 */
+	public function countTokens(): int
+	{
+		$payload = $this->buildPayload();
+		$payload = array_intersect_key($payload, array_flip(['model', 'messages', 'system']));
+		return $this->client->callApi('v1/messages/count_tokens', $payload)['input_tokens'];
 	}
 
 
