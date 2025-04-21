@@ -16,7 +16,7 @@ use AIAccess\Http;
 /**
  * Client implementation for accessing Anthropic Claude API models.
  */
-final class Client implements AIAccess\Chat\Service
+final class Client implements AIAccess\Chat\Service, AIAccess\Batch\Service
 {
 	private string $baseUrl = 'https://api.anthropic.com/';
 	private string $apiVersion = '2023-06-01';
@@ -32,6 +32,49 @@ final class Client implements AIAccess\Chat\Service
 	public function createChat(string $model): Chat
 	{
 		return new Chat($this, $model);
+	}
+
+
+	public function createBatch(): Batch
+	{
+		return new Batch($this);
+	}
+
+
+	/**
+	 * Lists existing batch jobs.
+	 * @param  ?int  $limit  Maximum number of jobs to return
+	 * @param  ?string  $after  Cursor for pagination (retrieve the page after this batch ID)
+	 * @param  ?string  $before  Cursor for pagination (retrieve the page before this batch ID)
+	 * @return BatchResponse[]
+	 */
+	public function listBatches(?int $limit = null, ?string $after = null, ?string $before = null): array
+	{
+		$params = array_filter([
+			'limit' => $limit,
+			'after_id' => $after,
+			'before_id' => $before,
+		], fn($v) => $v !== null);
+		$response = $this->callApi('v1/messages/batches?' . http_build_query($params));
+
+		$res = [];
+		foreach ($response['data'] ?? [] as $batchData) {
+			$res[] = new BatchResponse($this, $batchData);
+		}
+		return $res;
+	}
+
+
+	public function retrieveBatch(string $id): BatchResponse
+	{
+		return new BatchResponse($this, $this->callApi("v1/messages/batches/{$id}"));
+	}
+
+
+	public function cancelBatch(string $id): bool
+	{
+		$response = $this->callApi("v1/messages/batches/{$id}/cancel", []);
+		return isset($response['cancel_initiated_at']);
 	}
 
 
@@ -59,11 +102,11 @@ final class Client implements AIAccess\Chat\Service
 
 	/**
 	 * @param  mixed[]  $payload
-	 * @return mixed[]
+	 * @return ($isJson is true ? mixed[] : string)
 	 * @throws AIAccess\ServiceException
 	 * @internal
 	 */
-	public function callApi(string $endpoint, array $payload): array
+	public function callApi(string $endpoint, ?array $payload = null, bool $isJson = true): array|string
 	{
 		$url = str_contains($endpoint, '://') ? $endpoint : $this->baseUrl . $endpoint;
 		$headers = [
@@ -79,7 +122,7 @@ final class Client implements AIAccess\Chat\Service
 			throw new AIAccess\ApiException($errorMessage, $response->getStatusCode());
 		}
 
-		return is_array($data)
+		return !$isJson || is_array($data)
 			? $data
 			: throw new AIAccess\ApiException('Invalid JSON response from Claude API');
 	}

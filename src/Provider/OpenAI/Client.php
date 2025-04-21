@@ -12,12 +12,13 @@ namespace AIAccess\Provider\OpenAI;
 use AIAccess;
 use AIAccess\Embedding\Vector;
 use AIAccess\Http;
+use AIAccess\Http\FormData;
 
 
 /**
  * Client implementation for accessing OpenAI API models.
  */
-final class Client implements AIAccess\Chat\Service, AIAccess\Embedding\Service
+final class Client implements AIAccess\Chat\Service, AIAccess\Embedding\Service, AIAccess\Batch\Service
 {
 	private string $baseUrl = 'https://api.openai.com/v1/';
 	private ?string $organizationId = null;
@@ -33,6 +34,46 @@ final class Client implements AIAccess\Chat\Service, AIAccess\Embedding\Service
 	public function createChat(string $model): Chat
 	{
 		return new Chat($this, $model);
+	}
+
+
+	public function createBatch(): Batch
+	{
+		return new Batch($this);
+	}
+
+
+	/**
+	 * Lists existing batch jobs.
+	 * @param  ?int  $limit  Maximum number of jobs to return
+	 * @param  ?string  $after  Cursor for pagination (retrieve the page after this batch ID)
+	 * @return BatchResponse[]
+	 */
+	public function listBatches(?int $limit = null, ?string $after = null): array
+	{
+		$params = array_filter([
+			'limit' => $limit,
+			'after' => $after,
+		], fn($v) => $v !== null);
+		$response = $this->callApi('batches?' . http_build_query($params));
+
+		$res = [];
+		foreach ($response['data'] ?? [] as $batchData) {
+			$res[] = new BatchResponse($this, $batchData);
+		}
+		return $res;
+	}
+
+
+	public function retrieveBatch(string $id): BatchResponse
+	{
+		return new BatchResponse($this, $this->callApi("batches/{$id}"));
+	}
+
+
+	public function cancelBatch(string $id): bool
+	{
+		return $this->callApi("batches/{$id}/cancel", '')['status'] === 'cancelling';
 	}
 
 
@@ -87,6 +128,34 @@ final class Client implements AIAccess\Chat\Service, AIAccess\Embedding\Service
 
 
 	/**
+	 * Uploads a file to the OpenAI API.
+	 * @throws AIAccess\ServiceException
+	 */
+	public function uploadContent(string $content, string $fileName, string $purpose, ?string $mimeType = null): string
+	{
+		$formData = (new FormData)
+			->addField('purpose', $purpose)
+			->addFileContent('file', $content, $fileName, $mimeType);
+		$response = $this->callApi('files', $formData);
+		return $response['id'];
+	}
+
+
+	/**
+	 * Uploads a file from a local path to the OpenAI API.
+	 * @throws AIAccess\ServiceException
+	 */
+	public function uploadFile(string $filePath, string $purpose, ?string $mimeType = null): string
+	{
+		$formData = (new FormData)
+			->addField('purpose', $purpose)
+			->addFile('file', $filePath, null, $mimeType);
+		$response = $this->callApi('files', $formData);
+		return $response['id'];
+	}
+
+
+	/**
 	 * Sets or updates client-wide options.
 	 * @param  ?string  $customBaseUrl  Override the base API URL. Null leaves current setting unchanged.
 	 * @param  ?string  $organizationId  Set the OpenAI Organization ID. Null leaves current setting unchanged or removes it.
@@ -108,13 +177,19 @@ final class Client implements AIAccess\Chat\Service, AIAccess\Embedding\Service
 
 	/**
 	 * @param  mixed[]  $payload
-	 * @return mixed[]
+	 * @param  string[]  $headers
+	 * @return ($isJson is true ? mixed[] : string)
 	 * @throws AIAccess\ServiceException
 	 * @internal
 	 */
-	public function callApi(string $endpoint, array $payload): array
+	public function callApi(
+		string $endpoint,
+		array|string|FormData|null $payload = null,
+		array $headers = [],
+		bool $isJson = true,
+	): array|string
 	{
-		$headers = array_filter([
+		$headers = array_filter($headers + [
 			'Authorization' => 'Bearer ' . $this->apiKey,
 			'OpenAI-Organization' => $this->organizationId,
 		]);
@@ -127,7 +202,7 @@ final class Client implements AIAccess\Chat\Service, AIAccess\Embedding\Service
 			throw new AIAccess\ApiException($errorMessage, $response->getStatusCode());
 		}
 
-		return is_array($data)
+		return !$isJson || is_array($data)
 			? $data
 			: throw new AIAccess\ApiException('Invalid JSON response from OpenAI API');
 	}
